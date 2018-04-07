@@ -15,6 +15,8 @@
         $idid=$r['id'];
         mysqli_query($dbase,"UPDATE `chats` SET `msgread`=1 WHERE `id`=$idid AND `msgfrom`='$from' AND `msgto`='$to'");
     }
-    echo json_encode($rows);
+    $data=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `status` FROM `users` WHERE `uname`='$from'"));
+    $data=$data["status"];
+    echo json_encode(array($rows,$data));
 
 ?>

@@ -11,6 +11,9 @@ include_once('dbconfig.php');
 //jasmin nasit
 
 if(isset($_POST['subbtn'])){
+	$id=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT MAX(`id`) FROM `sell`"));
+	$id=$id['MAX(`id`)'];
+	$id++;
 	$uname=$_SESSION['userLogged'];
 	$iname=$_POST['iname'];
 	$itype=$_POST['itype'];
@@ -18,8 +21,30 @@ if(isset($_POST['subbtn'])){
 	$price=$_POST['price'];
 	$address=$_POST['address'];
 	$amobno=$_POST['amobno'];
-    mysqli_query($dbase,"INSERT INTO sell(`uname`,`itype`,`description`,`price`,`address`,`altmono`,`iname`) VALUES('$uname','$itype','$des','$price','$address','$amobno','$iname')");
-    header('Location:buy.php?flag=1');
+	$ipic=array("","","","");
+	for($i=0;$i<4;$i++)
+	{
+		if(isset($_FILES['sellpics'.$i])){
+		if ($_FILES['sellpics'.$i]['tmp_name']!='') {
+			$location='sellpics/';
+			$tmp_name=$_FILES['sellpics'.$i]['tmp_name'];
+			$name=$_FILES['sellpics'.$i]['name'];
+			$name=explode('.', $name);
+			$name=$name[1];
+			$name=$id.$i.'.'.$name;
+			$ipic[$i]=$name;
+			move_uploaded_file($tmp_name,$location.$name);
+			echo "<script>console.log('$i')</script>";
+		}}
+
+	}
+
+	$img1=$ipic[0];
+	$img2=$ipic[1];
+	$img3=$ipic[2];
+	$img4=$ipic[3];
+    mysqli_query($dbase,"INSERT INTO sell(`id`,`uname`,`itype`,`description`,`price`,`address`,`altmono`,`iname`,`img1`,`img2`,`img3`,`img4`) VALUES('$id','$uname','$itype','$des','$price','$address','$amobno','$iname','$img1','$img2','$img3','$img4')");
+    // header('Location:buy.php?flag=1');
     }
 
 
@@ -36,7 +61,6 @@ if(isset($_POST['subbtn'])){
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/mobtab.css">
-	<link rel="stylesheet" type="text/css" href="css/jasmin.css">
 </head>
 <body>
 	<div class="containerp">
@@ -45,7 +69,7 @@ if(isset($_POST['subbtn'])){
 			<div class="icont">
 				<div id="sellBox">
 					<div id="sellWordDiv"><span id="sellWord">Sell</span></div>
-					<form name="sell" method="POST" action="sell.php">
+					<form enctype="multipart/form-data" name="sell" method="POST" action="sell.php">
 						<table id="sellTable">
 							<tr>
 								<td colspan="2"><p class="formRemark"><span class="starImp">*</span> Denotes Mandatory Fields</p></td>
@@ -65,7 +89,7 @@ if(isset($_POST['subbtn'])){
 											<option value="Electronic Gadget">Electronic Gadget</option>
 											<option value="Cycle">Cycle</option>
 											<option value="Lab Equipment">Lab Equipment</option>
-											<option >Other</option>
+											<option value="other" >Other</option>
 									</select>
 								</td>
 							</tr>
@@ -117,4 +141,5 @@ if(isset($_POST['subbtn'])){
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/int.js"></script>
+<script type="text/javascript" src="js/restapi.js"></script>
 </html>

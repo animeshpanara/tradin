@@ -1,10 +1,6 @@
 <?php
 session_start();
 include_once('dbconfig.php');
-if (isset($_POST['logoutBtn'])) {
-	setcookie('userLogged','',time()-60);
-	header('Location:index.php');
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -46,5 +42,6 @@ if (isset($_POST['logoutBtn'])) {
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/int.js"></script> 
+<script type="text/javascript" src="js/restapi.js"></script> 
 
 </html>

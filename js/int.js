@@ -76,12 +76,17 @@ $(document).ready(function(){
 
   //menubar
 
+  $("#notiBell").click(function(){
+    $(".notiTabDiv,.dropParent").fadeToggle("slow");
+  });
+
   $(".loggedDiv").click(function(){
     $(".drop,.dropParent").fadeToggle("slow");
   }); 
 
    $(".dropParent").click(function(){
     $(".drop,.dropParent").fadeOut("slow");
+    $(".notiTabDiv").fadeOut("slow");
   }); 
 
 });
@@ -119,12 +124,13 @@ function uploadImgSell(imgValue){
   if((ext==="jpg" || ext==="png"))
   {
     if (imgValue.files[0].size<=1024*1024*5) {
+      document.getElementsByName('sellpics'+uploaded)[0].style.display="none";
       var td=document.getElementById('ImagesSellTd');
       var div=document.getElementsByClassName('uploadDivSell');
       var lastip=document.getElementsByClassName('sellPics');
       var input=document.createElement('input');
       input.type="file";
-      input.setAttribute('name','sellPics');
+      input.setAttribute('name','sellpics'+(uploaded+1));
       input.setAttribute('onchange','uploadImgSell(this)');
       input.className="sellPics"
       div[0].insertBefore(input,lastip[uploaded]);
@@ -145,7 +151,7 @@ function uploadImgSell(imgValue){
         }
         reader.readAsDataURL(imgValue.files[0]);
       }
-      if(uploaded==6)
+      if(uploaded==4)
       {
         div[0].style.display="none";
       }
@@ -175,4 +181,20 @@ $(document).on("pagecreate","#pageone",function(){
 function handleHeight(textarea,height){
   textarea.style.height=height+'px';
   textarea.style.height=((height/2)+textarea.scrollHeight)+'px';
+}
+
+var unloaded = false;
+$(window).on('unload', unload);  
+function unload(){    
+  if(!unloaded){
+    $('body').css('cursor','wait');
+    $.ajax({
+      type: 'post',
+      url: 'logOut.php',
+      success:function(){ 
+        unloaded = true; 
+      },
+      timeout: 5000
+    });
+  }
 }

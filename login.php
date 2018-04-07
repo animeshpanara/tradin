@@ -34,7 +34,10 @@ if (isset($_POST['loginSubmit'])){
 				$_SESSION['notVerified']="notVerified";
 			}
 			else
+			{
+				mysqli_query($dbase,"UPDATE `users` SET `status`='1' WHERE `uname`='$username' ");
 				header("Location:index.php");
+			}
 		}
 		else{
 			$result="<span style='color:red'>Incorrect Password!</span>";
@@ -90,4 +93,5 @@ if (isset($_POST['loginSubmit'])){
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/int.js"></script>
+<script type="text/javascript" src="js/restapi.js"></script>
 </html>

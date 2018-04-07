@@ -13,10 +13,12 @@
 				}
 			?>
 			<!-- activeMenumob -->
-			<li class="mobmenuli" onclick="location.href='buy.php'"><i class="fa fa-shopping-cart"></i>BUY</li>
-			<li class="mobmenuli" onclick="location.href='sell.php'"><i class="fa fa fa-handshake-o"></i>SELL</li>
-			<li class="mobmenuli" onclick="location.href='aboutus.php'"><i class="fa fa fa-certificate"></i>ABOUT</li>
-			<li class="mobmenuli" onclick="location.href='contactus.php'"><i class="fa fa fa-envelope"></i>CONTACT US</li>
+			<li class="mobmenuli" onclick="location.href='buy.php'"><i class="fa fa-shopping-cart"></i>&nbsp;BUY</li>
+			<li class="mobmenuli" onclick="location.href='sell.php'"><i class="fa fa fa-handshake-o"></i>&nbsp;SELL</li>
+			<li class="mobmenuli" onclick="location.href='chatMain.php'"><i class="fa fa fa-comments"></i>&nbsp;CHATS</li>
+			<li class="mobmenuli" onclick="location.href='aboutus.php'"><i class="fa fa fa-certificate"></i>&nbsp;ABOUT</li>
+			<li class="mobmenuli" onclick="location.href='contactus.php'"><i class="fa fa fa-envelope"></i>&nbsp;CONTACT US</li>
+
 		</ul>
 	</div>
 </div>
@@ -24,8 +26,12 @@
 if(isset($_POST['logout']))
 {
 	session_start();
+	$uname=$_SESSION["userLogged"];
+	include_once('dbconfig.php');
 	session_unset();
 	session_destroy();
+	$time=time()+3.5*60*60;
+	mysqli_query($dbase,"UPDATE `users` SET `status`='$time' WHERE `uname`='$uname' ");
 	header("location:index.php");
 }
 if (isset($_SESSION['userLogged'])) {
@@ -34,9 +40,79 @@ if (isset($_SESSION['userLogged'])) {
 	$fname=$names['fname'];
 	$lname=$names['lname'];
 	$propic=$names['propic'];
+
+	$notifications=mysqli_query($dbase,"SELECT * FROM `notifications` WHERE `notify`='$uname' ORDER BY `time` DESC");
+	$totalNoti=0;
+	$totalRead=0;
+	$notiTables="";
 }
 ?>
 <div class="dropParent"></div>
+<div class="notiTabDiv">
+	<?php
+		if (isset($_SESSION['userLogged'])) {
+		while($notification=mysqli_fetch_assoc($notifications))
+		{
+			$minTime=$notification['time'];
+			$notify=$notification['notify'];
+			$notifier=$notification['notifier'];
+			$category=$notification['category'];
+			$count=$notification['count'];
+			if($category=="chat")
+			{
+				$locationToGo='chat.php?chatWith='.$notifier.'&chat=Chat+with+Seller';
+			}
+			//add more cate here
+
+			$propicNot=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `propic` FROM `users` WHERE `uname`='$notifier'"));
+			$propicNot=$propicNot['propic'];
+			$notificationText=$notification['notification'];
+			if($notification['readBy']=='0')
+			{
+				$totalNoti++;
+				$notiTables.="
+				<div class=\"notiTablesDivParent\"><table onclick=\"location.href='$locationToGo'\" class='notiTables unread'>
+					<tr>
+						<td><img src='propics/$propicNot'>";
+				if($count>1)
+				{
+					$notiTables.="<span class=\"countSpan\" >$count</span>";
+				}
+				$notiTables.="</td>
+						<td class=\"notText\">$notificationText</td>
+							</tr>
+						</table></div>
+						";
+			}
+			else
+			{
+				$notiTables.="
+				<div class=\"notiTablesDivParent\"><table onclick=\"location.href='$locationToGo'\" class=\"notiTables\">
+					<tr>
+						<td><img src='propics/$propicNot'>";
+						if($count>1)
+						{
+							$notiTables.="<span class=\"countSpan\" >$count</span>";
+						}
+					$notiTables.="</td>
+						<td class=\"notText\">$notificationText</td>
+					</tr>
+				</table></div>
+				";
+			}
+		}
+		if($totalNoti>0)
+		{
+			$bellIcon="<i id=\"notiBell\" onclick=\"readAllNoti()\" class=\"fa fa-bell\">$totalNoti</i>";
+		}
+		else
+		{
+			$bellIcon="<i id=\"notiBell\" onclick=\"readAllNoti()\" class=\"fa fa-bell\">$totalNoti</i>";
+		}
+		echo "$notiTables";
+	}
+	?>
+</div>
 <div class="drop">
 	<ul>
 		<?php
@@ -49,12 +125,14 @@ if (isset($_SESSION['userLogged'])) {
 <div class="rowp menubar">
 	<div class="icont">
 		<div class="col-3">
+
 			<?php
 			if (isset($_SESSION['userLogged'])) {
 				echo "<div class='loggedDiv'>";
 				echo "<div><img class=\"profilePic\" src=\"propics/$propic\"></div>";
 				echo "<div class='caretDiv'><span class='caret'></span></div>";
 				echo "</div>";
+				echo $bellIcon;
 			}
 			?>
 		</div>
@@ -72,6 +150,7 @@ if (isset($_SESSION['userLogged'])) {
 				?>
 				<li class="menuli" onclick="location.href='buy.php'">BUY</li>
 				<li class="menuli" onclick="location.href='sell.php'">SELL</li>
+				<li class="menuli" onclick="location.href='chatMain.php'">CHATS</li>
 				<li class="menuli" onclick="location.href='aboutus.php'">ABOUT&nbsp;US</li>
 				<li class="menuli" onclick="location.href='contactus.php'">CONTACT&nbsp;US</li>
 			</ul>

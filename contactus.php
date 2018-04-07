@@ -62,16 +62,6 @@ include_once('dbconfig.php');
 									mehtavatsald02@mail.com</a></p>
 							</div>
 						</div>
-						<div class="col-6 col-sl-12 devCol">
-							<div class="imgwraper akswrap">
-								<span class="devslinks1"><i class="fa fa-google-plus"></i></span><span class="devslinks1"><i class="fa fa-facebook"></i></span>
-							</div>
-							<img src="images/aks.jpg" class="developers aksImg">
-							<div class="devInfo">
-								<h1 id="aks">Aksh Patel</h1>
-								<p class="devP">Mobile : <a href="tel:+919408669033" class="mobmail">+91 9408669033</a></p>
-								<p class="devP">Email-Id : <a class="mobmail" href="https://www.google.com/gmail" target="_blank">akshkpatel@gmail.com</a></p>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -82,4 +72,5 @@ include_once('dbconfig.php');
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/int.js"></script>
+<script type="text/javascript" src="js/restapi.js"></script>
 </html>

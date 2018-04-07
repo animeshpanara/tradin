@@ -29,26 +29,26 @@ include_once('dbconfig.php');
 					<a href="add.php?val=Book"><img src="images/study-material.jpg" class="buyimg3"><br><span class="buyNames">BOOKS</span></a>
 				</div>
 				<div class="col-3 col-sl-12 imgBoxc">
-					<a href=""><img src="images/drawins.png" class="buyimg3"><br><span class="buyNames">DRAWING INSTRUMENTS</span></a>
+					<a href="add.php?val=Drawing Instrument"><img src="images/drawins.png" class="buyimg3"><br><span class="buyNames">DRAWING INSTRUMENTS</span></a>
 				</div>
 				<div class="col-3 col-sl-12 imgBoxc">
-					<a href=""><img src="images/musicop.gif" class="buyimg3"><br><span class="buyNames">MUSICAL INSTRUMENTS</span></a>
+					<a href="add.php?val=Musical Instrument"><img src="images/musicop.gif" class="buyimg3"><br><span class="buyNames">MUSICAL INSTRUMENTS</span></a>
 				</div>
 				<div class="col-3 col-sl-12 imgBoxc">
-					<a href=""><img src="images/egads.jpg" class="buyimg3"><br><span class="buyNames">ELECTRONIC GADGETS</span></a>
+					<a href="add.php?val=Electronic Gadget"><img src="images/egads.jpg" class="buyimg3"><br><span class="buyNames">ELECTRONIC GADGETS</span></a>
 				</div>
 			</div>
 		</div>
 		<div class="rowp">
 			<div class="icont"> 
 				<div class="col-4 col-sl-12" id="imgBoxl">
-					<a href=""><img src="images/cycleop.jpg" class="buyimg4"><br><span class="buyNames" id="leftName">CYCLES</span></a>
+					<a href="add.php?val=Cycle"><img src="images/cycleop.jpg" class="buyimg4"><br><span class="buyNames" id="leftName">CYCLES</span></a>
 				</div>
 				<div class="col-4 col-sl-12 imgBoxc">
-					<a href=""><img src="images/lab.jpg" class="buyimg4"><br><span class="buyNames">LAB EQUIPMENTS</span></a>
+					<a href="add.php?val=Lab Equipment"><img src="images/lab.jpg" class="buyimg4"><br><span class="buyNames">LAB EQUIPMENTS</span></a>
 				</div>
 				<div class="col-4 col-sl-12" id="imgBoxr">
-					<a href=""><img src="images/other.jpg" class="buyimg4"><br><span class="buyNames" id="rightName">OTHER</span></a>
+					<a href="add.php?val=other"><img src="images/other.jpg" class="buyimg4"><br><span class="buyNames" id="rightName">OTHER</span></a>
 				</div>
 			</div>
 		</div>
@@ -57,4 +57,5 @@ include_once('dbconfig.php');
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/int.js"></script>
+<script type="text/javascript" src="js/restapi.js"></script>
 </html>
