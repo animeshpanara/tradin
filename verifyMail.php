@@ -17,6 +17,8 @@ if (isset($_POST['verifyMail'])) {
 	{
 		mysqli_query($dbase,"UPDATE `users` SET `verified`='verified' WHERE `uname`='$userName'");
 		unset($_SESSION['notVerified']);
+		$time=time() + 4.5*60*60*1000;
+		mysqli_query($dbase,"UPDATE `users` SET `status`='1' WHERE `uname`='$userName' ");
 		header("Location:index.php");
 	}
 	else
@@ -87,4 +89,5 @@ if (isset($_POST['resend'])) {
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/int.js"></script>
+<script type="text/javascript" src="js/restapi.js"></script>
 </html>

@@ -58,6 +58,7 @@ function loadChats(from , to){
 		    td.appendChild(divMsg);
 		    tr.appendChild(td);
 			chatTable.appendChild(tr);	
+			console.log(this.responseText);
     	}
 
 	 	startchecking(from,to);
