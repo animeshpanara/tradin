@@ -1119,3 +1119,14 @@ div.notiTabDiv{
 	font-size: 16px;
 	padding-left: 20px;
 }
+
+.bidInput{
+	width: 90%;
+	display: inline-block;
+	margin: 0 auto;
+	border-radius: 3px;
+	outline: 0;
+	border:1px solid #607d8b;
+	height: 30px;
+	padding-left: 10px;
+}

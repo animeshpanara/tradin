@@ -45,7 +45,7 @@ include_once('dbconfig.php');
 				</div>
 			</div>
 		</div>
-		<div class="rowp"> 
+		<!-- <div class="rowp"> 
 			<div class="icont">
 				<div id="conBox2">
 					<div id="conWordDiv"><span id="conWord">Contact Developers</span></div>
@@ -66,7 +66,7 @@ include_once('dbconfig.php');
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>  -->
 	</div>
 </body>
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>

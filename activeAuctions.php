@@ -7,15 +7,10 @@ if(isset($_SESSION['notVerified']))
 if (!isset($_SESSION['userLogged'])) {
 	header('Location:login.php');
 }
-
+$userName=$_SESSION['userLogged'];
 include_once('dbconfig.php');
 include_once('chatConfig.php'); 
-if (!isset($_GET['val'])) {
-	header("Location:buy.php");
-}
-$userName=$_SESSION["userLogged"];
-$itype=$_REQUEST['val'];
-$info=mysqli_query($dbase,"SELECT * FROM sell WHERE `itype`='$itype' ORDER BY `id` DESC");
+$auctions=mysqli_query($dbase,"SELECT * FROM `auctions`");
 
 
 include_once('header.php');
@@ -120,63 +115,96 @@ include_once('header.php');
 		
 			<?php include_once('header.php'); ?>
 			<?php
-				foreach($info as $each){
-				$iname=$each['iname'];
-				$desc=$each['description'];
-				$price=$each['price'];
-				$id=$each['id'];
-				// $fname=$each['fname'];
-				// $lname=$each['lname'];
-				$uname=$each['uname'];
-				$names=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `lname`,`fname` FROM `users` WHERE `uname`='$uname'"));
-				$lname=$names['lname'];
-				$fname=$names['fname'];
-				if($each['img1']!="")
-					$img1=$each['img1'];
-				else
-					$img1="noImg.jpg";
+				foreach($auctions as $data){
+					$aid=$data['aid'];
+					$id=$data['id'];
+					$topPrice=$data['topPrice'];
+					$topBidder=$data['topBidder'];
+					$basePrice=$data['basePrice'];
+					$total=$data['total'];
+					if($topPrice=="0")
+					{
+						$topPrice=$basePrice;
+					}
+					if(empty($topBidder))
+					{
+						$topBidder=" - ";
+					}
+					$time=$data['startTime'];
+					$startsAt="";
 
-				if($each['img2']!="")
-					$img2=$each['img2'];
-				else
-					$img2="noImg.jpg";
+					$startTime=floor($time/1000)+3.5*60*60;
+					$currentTime=time()+3.5*60*60;
+					$endTime=$startTime+$total;
+					echo "<script>console.log($startTime)</script>";
+					echo "<script>console.log($currentTime)</script>";
+					echo "<script>console.log($endTime)</script>";
+					$options="";
 
-				if($each['img3']!="")
-					$img3=$each['img3'];
-				else
-					$img3="noImg.jpg";
+					$each=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT * FROM `sell` WHERE `id`='$id'"));
+					$iname=$each['iname'];
+					$desc=$each['description'];
+					$price=$each['price'];
+					$id=$each['id'];
+					// $fname=$each['fname'];
+					// $lname=$each['lname'];
+					$uname=$each['uname'];
+					$names=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `lname`,`fname` FROM `users` WHERE `uname`='$uname'"));
+					$lname=$names['lname'];
+					$fname=$names['fname'];
+					if($each['img1']!="")
+						$img1=$each['img1'];
+					else
+						$img1="noImg.jpg";
 
-				if($each['img4']!="")
-					$img4=$each['img4'];
-				else
-					$img4="noImg.jpg";
+					if($each['img2']!="")
+						$img2=$each['img2'];
+					else
+						$img2="noImg.jpg";
+
+					if($each['img3']!="")
+						$img3=$each['img3'];
+					else
+						$img3="noImg.jpg";
+
+					if($each['img4']!="")
+						$img4=$each['img4'];
+					else
+						$img4="noImg.jpg";
+
+					if($startTime>$currentTime)
+					{
+						$startsAt="<span style='color:blue;'>Auction starts at : ".date("h:i:sa d-m-Y",floor($time/1000)+3.5*60*60)."</span>";
 
 
-				$iid=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `iid` FROM `interested` WHERE `id`='$id' AND `likedBy`='$userName' "));
-				if(empty($iid))
-					$intText="Interested";
-				else
-					$intText="Not Interested";
+					}
+					else if($endTime<$currentTime)
+					{
+						$startsAt="<span style='color:red;'>Auction Ended!</span>";
+					}
+					else
+					{
+						$startsAt="<span style='color:green;'>Active...</span>"."<span style='color:blue;'> Auction Ends at : ".date("h:i:sa d-m-Y",$endTime)."</span>";
+						if($userName!=$uname)
+							$options="<tr>
+										<td>
+											<input type='text' class='bidInput' id='bidInput$aid' placeholder='Enter Bid Price'>
+										</td>
+										<td>
+											<button class='btn btn-primary' onclick=\"haveBid($aid)\">Bid</button>
+										</td>
+										<tr>
+										<td colspan='2'><span id='bidError$aid' style='color:red;'></span></td>
+										</tr>
+									</tr>";
 
-				if($userName!=$uname)
-					$showBtn="
-				<tr>
-					<td>
-						<form method=\"GET\" action=\"chat.php\">
-							<input type='hidden' name='chatWith' value='$uname'>
-							<input style=\"margin-top:20px;\" type='submit' class='btn btn-success' value='Chat with Seller' name='chat'>
-						</form>
-					</td>
-					<td>
-						<button class=\"btn btn-primary\" onclick=\"addForInt($id,this)\">$intText</button>
-					</td>
-				</tr>";
+					}
+					
 				
-				else 
-					$showBtn="";
 			    echo "
 			    	<div id=\"addBox\" style=\"padding-bottom: 20px;\">
 								<table id=\"sellTable\" style=\"width: 90%; margin-top: 10px;\">
+									<tr><td colspan='2'>$startsAt</td></tr>
 									<tr>
 										<td rowspan=\"3\"><img onclick=\"myMode(this.src)\" src=\"sellpics/$img1\" style=\"width: 150px;height: 150px;cursor: pointer;\"></td>
 										<td><label for=\"iname\" class=\"slabels\">Item Name : </label><span class=\"starImp\"><span style=\"font-size: 20px;margin-left: 15px; color: blue\">$iname</span></td>
@@ -186,13 +214,19 @@ include_once('header.php');
 									</tr>
 									<tr>
 										
-										<td><label for=\"iname\" class=\"slabels\">Price : </label><span style=\"font-size: 20px;margin-left: 15px; color: red;\">$price</span></td>
+										<td><label for=\"iname\" class=\"slabels\">Base Price : </label><span style=\"font-size: 20px;margin-left: 15px; color: red;\">$price</span></td>
 									</tr>
 									<tr>
 										<td><img onclick=\"myMode(this.src)\" src=\"sellpics/$img2\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"><img onclick=\"myMode(this.src)\" src=\"sellpics/$img3\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"><img onclick=\"myMode(this.src)\" src=\"sellpics/$img4\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"></td>
 										<td><label for=\"iname\" class=\"slabels\">Seller Name : </label><span style=\"font-size: 20px;margin-left: 15px;\">$fname $lname </span></td>
-									</tr>$showBtn
-									
+									</tr>
+									<tr>
+										
+										<td><label for=\"iname\" class=\"slabels\">Top Price Bidded : </label><span id='topPrice$aid' style=\"font-size: 20px;margin-left: 15px; color: red;\">$topPrice</span></td>
+										<td>
+											<label for=\"iname\" class=\"slabels\">Top Bidder : </label><span  id='topBidder$aid' style=\"font-size: 20px;margin-left: 15px; color: red;\">$topBidder</span>
+										</td>
+									</tr>$options
 									
 				</table>
 				

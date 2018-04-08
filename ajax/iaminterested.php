@@ -25,7 +25,7 @@
 					$notification="Your item $iname is now eligible for auction.Click to avail it.";
 					mysqli_query($dbase,"INSERT INTO `notifications` (`notify`,`notifier`,`notification`,`category`,`aid`) VALUES ('$user','','$notification','auctionAvail','$item')");
 
-					mysqli_query($dbase,"INSERT INTO `auctions` (`id`,`uname`,`basePrice`) VALUES ('$item','$user','$price')");
+					mysqli_query($dbase,"INSERT INTO `auctions` (`id`,`uname`,`basePrice`,`topPrice`) VALUES ('$item','$user','$price','$price')");
 				}
 			}
 		}

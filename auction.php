@@ -18,6 +18,8 @@ else
 {
 	$for=$_GET['for'];
 	$item=$_GET['item'];
+	$iname=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `iname` FROM `sell` WHERE `id`='$item'"));
+	$iname=$iname['iname'];
 	$isthere = mysqli_fetch_assoc(mysqli_query($dbase,"SELECT * FROM `auctions` WHERE `uname`='$for' AND `id`='$item'"));
 	if(empty($isthere))
 	{
@@ -26,8 +28,19 @@ else
 	else if(isset($_POST['availAuction']))
 	{
 		$time=$_POST['time'];
-		mysqli_query($dbase,"UPDATE `auctions` SET `startTime`='$time' WHERE `uname`='$for' AND `id`= '$item' ");
-		header('Location:activeAuctions.php');
+		$total=$_POST['total'];
+		mysqli_query($dbase,"UPDATE `auctions` SET `startTime`='$time', `total`='$total' WHERE `uname`='$for' AND `id`= '$item' ");
+
+		$interested=mysqli_query($dbase,"SELECT `likedBy` FROM `interested` WHERE `id`='$item'");
+		while($nots=mysqli_fetch_assoc($interested))
+		{
+			$notify=$nots['likedBy'];
+			$notifier=$for;
+			$notification="An Auction for item $iname you are interested in buying is held on ".date("h:i:sa d-m-Y",floor($time/1000)+3.5*60*60)." Click here to visit.";
+			$category="auction";
+			mysqli_query($dbase,"INSERT INTO `notifications` (`notify`,`notifier`,`notification`,`category`) VALUES ('$notify','$notifier','$notification','$category') ");
+		}
+		// header('Location:activeAuctions.php');
 	}
 }
 ?>
@@ -57,11 +70,17 @@ else
 							</tr>
 							<tr>
 								<td class="signTd"><label for="fname" class="slabels">Enter Start Time of Your Auction<span class="starImp">*</span> :</label></td>
-								<td><span class="starImpm">*</span><input type="text" name="time" class="signupips" style="width: 310px;font-size: 17px;" placeholder="Start Time in hh:mm:ss format" value=""></td>
+								<td><span class="starImpm">*</span><input type="text" name="time1" class="signupips" style="width: 310px;font-size: 17px;" placeholder="Start Time in hh:mm:ss format" value=""></td>
+							</tr>
+							<tr>
+								<td class="signTd"><label for="fname" class="slabels">Enter Toatl Time for Auction<span class="starImp">*</span> :</label></td>
+								<td><span class="starImpm">*</span><input type="text" name="total1" class="signupips" style="width: 310px;font-size: 17px;" placeholder="Total time in hh:mm:ss" value="">
+								</td>
 							</tr>
 							<tr>
 								<td colspan="2">
 									<input type="hidden" name="time" id="auctionTime">
+									<input type="hidden" name="total" id="auctionTotalTime">
 									<input type="submit" name="availAuction" class="btn btn-primary" value="AVAIL" id="signupBtn">
 								</td>
 							</tr>
@@ -81,17 +100,16 @@ else
 function formTime() {
 	var date=document.getElementsByName('date')[0].value;
 	var day=date.split('/')[0];
-	var month=date.split('/')[1];
+	var month=date.split('/')[1]-1;
 	var year=date.split('/')[2];
 
-	var time=document.getElementsByName('time')[0].value;
+	var time=document.getElementsByName('time1')[0].value;
 	var hour=time.split(':')[0];
 	var min=time.split(':')[1];
 	var sec=time.split(':')[2];
 
 	var time=new Date(year,month,day,hour,min,sec);
 	time=time.getTime();
-	console.log(time);
 
 	if(time<=0)
 		return false;
@@ -99,6 +117,20 @@ function formTime() {
 	{
 		document.getElementById('auctionTime').value=time;
 	}
+
+	var total=document.getElementsByName('total1')[0].value;
+	hour=total.split(':')[0];
+	console.log(hour);
+	min=total.split(':')[1];
+	console.log(min);
+	sec=total.split(':')[2];
+	console.log(sec);
+	total= parseInt(hour)*60*60 + parseInt(min)*60 + parseInt(sec);
+	if(!isNaN(total)){
+		document.getElementById('auctionTotalTime').value=total;		
+	}
+	else
+		return false;
 }
 </script>
 </html>

@@ -29,7 +29,8 @@ $uname=$_SESSION["userLogged"];
 				<div id="sellBox">
 					<div id="sellWordDiv"><span id="sellWord">Recent Chats</span></div>
 						<?php
-							$myChats = mysqli_query($dbase,"SELECT DISTINCT `msgfrom`,`msg` FROM `chats` WHERE `msgfrom`<>'$uname' AND `msgto`='$uname' ORDER BY `time` DESC");
+							// $myChats = mysqli_query($dbase,"SELECT DISTINCT `msgfrom`,`msg` FROM `chats` WHERE `msgfrom`<>'$uname' AND `msgto`='$uname' ORDER BY `time` DESC");
+							$myChats = mysqli_query($dbase,"SELECT * FROM `chats` WHERE `id` in (SELECT MAX(`id`) as `pid` FROM `chats` GROUP BY `msgfrom`) AND `msgfrom`<>'$uname' AND `msgto`='$uname' ORDER BY `time` DESC");
 							while($myChat=mysqli_fetch_assoc($myChats))
 							{
 								$from=$myChat["msgfrom"];

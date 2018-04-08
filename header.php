@@ -67,6 +67,10 @@ if (isset($_SESSION['userLogged'])) {
 			{
 				$locationToGo='auction.php?for='.$notify.'&item='.$aid;
 			}
+			else if($category=="auction")
+			{
+				$locationToGo='activeAuctions.php';
+			}
 			//add more cate here
 
 			if($notifier!="")
