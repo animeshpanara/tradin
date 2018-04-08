@@ -58,14 +58,27 @@ if (isset($_SESSION['userLogged'])) {
 			$notifier=$notification['notifier'];
 			$category=$notification['category'];
 			$count=$notification['count'];
+			$aid=$notification['aid'];
 			if($category=="chat")
 			{
 				$locationToGo='chat.php?chatWith='.$notifier.'&chat=Chat+with+Seller';
 			}
+			else if($category=="auctionAvail")
+			{
+				$locationToGo='auction.php?for='.$notify.'&item='.$aid;
+			}
 			//add more cate here
 
-			$propicNot=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `propic` FROM `users` WHERE `uname`='$notifier'"));
-			$propicNot=$propicNot['propic'];
+			if($notifier!="")
+			{
+				$propicNot=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `propic` FROM `users` WHERE `uname`='$notifier'"));
+				$propicNot=$propicNot['propic'];
+			}
+			else
+			{
+				$notifier = "Admin";
+				$propicNot="admin.png";
+			}
 			$notificationText=$notification['notification'];
 			if($notification['readBy']=='0')
 			{
@@ -79,7 +92,7 @@ if (isset($_SESSION['userLogged'])) {
 					$notiTables.="<span class=\"countSpan\" >$count</span>";
 				}
 				$notiTables.="</td>
-						<td class=\"notText\">$notificationText</td>
+						<td class=\"notText\">$notifier : $notificationText</td>
 							</tr>
 						</table></div>
 						";
@@ -95,7 +108,7 @@ if (isset($_SESSION['userLogged'])) {
 							$notiTables.="<span class=\"countSpan\" >$count</span>";
 						}
 					$notiTables.="</td>
-						<td class=\"notText\">$notificationText</td>
+						<td class=\"notText\">$notifier : $notificationText</td>
 					</tr>
 				</table></div>
 				";
@@ -109,6 +122,12 @@ if (isset($_SESSION['userLogged'])) {
 		{
 			$bellIcon="<i id=\"notiBell\" onclick=\"readAllNoti()\" class=\"fa fa-bell\">$totalNoti</i>";
 		}
+		if($notiTables=="")
+			$notiTables="<div class='notiTablesDivParent'><table class='notiTables'>
+			<tr>
+				<td class='notText'>No Notifications Yet!</td>
+			</tr>
+		</table></div>";
 		echo "$notiTables";
 	}
 	?>

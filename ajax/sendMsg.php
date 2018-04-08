@@ -11,8 +11,8 @@
     //$read=$json_data['read'];
     mysqli_query($dbase,"INSERT INTO `chats` (`msgfrom`,`msgto`,`time`,`msg`,`msgread`) VALUES ('$from','$to','$time','$msg','0')");
 
-    $userOnline=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `status` FROM `users` WHERE `uname`='$to'"));
-    $userOnline=$userOnline['status'];
+    $userOnline=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `chatActive` FROM `users` WHERE `uname`='$to'"));
+    $userOnline=$userOnline['chatActive'];
     if($userOnline!="1")
     {
         $isThereNots=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `notid`,`count` FROM `notifications` WHERE `notify`='$to' AND `notifier`='$from' AND `category`='chat' "));

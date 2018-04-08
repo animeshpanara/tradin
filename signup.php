@@ -4,6 +4,7 @@ if (isset($_SESSION['userLogged'])) {
 	header("Location:index.php");
 }
 include_once('dbconfig.php'); 
+include_once('chatConfig.php'); 
 $fname=$lname=$email=$mobno=$uname=$pass=$result="";
 if (isset($_POST['signupSubmit'])) {
 	$fname=$_POST['fname'];
@@ -59,7 +60,7 @@ if (isset($_POST['signupSubmit'])) {
 		$_SESSION['notVerified']="notVerified";
 		// $_SESSION['login']=$uname;
 		$verified=$verifyPass;
-		mysqli_query($dbase,"INSERT INTO `users` VALUES ('$fname','$lname','$email','$mobno','$uname','$pass','$name','$verified','0')");
+		mysqli_query($dbase,"INSERT INTO `users` VALUES ('$fname','$lname','$email','$mobno','$uname','$pass','$name','$verified','0', '0')");
 		header('Location:verifyMail.php');
 	}
 		

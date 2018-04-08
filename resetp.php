@@ -4,6 +4,7 @@ if (isset($_SESSION['userLogged'])) {
 	header('Location:index.php');
 }
 include_once('dbconfig.php');
+include_once('chatConfig.php'); 
 if (isset($_POST['sendMail'])) {
 	$uname=$_POST['uname'];
 	$email=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `email` FROM `users` WHERE `uname`='$uname' "));

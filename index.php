@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once('dbconfig.php');
+include_once('chatConfig.php'); 
 ?>
 <!DOCTYPE html>
 <html>

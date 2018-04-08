@@ -12,6 +12,7 @@ if(!isset($_GET['chat']))
 	header('Location:index.php');
 }
 include_once('dbconfig.php');
+include_once('chatConfig.php'); 
 $uname=$_SESSION["userLogged"];
 if($uname==$_GET['chatWith'])
 	 header("Location: {$_SERVER['HTTP_REFERER']}");
@@ -52,7 +53,15 @@ $chatWith=$_SESSION['chatWith'];
 						?>
 					</div>
 					<table id="sellTable" class="chatTable" style="width: 90%;">
-						
+						<!-- <tr>
+							<td>
+								<div class="chatSend">
+									<pre>fsdsad</pre>
+									<i class="fa fa-check"></i>
+								</div>	
+							</td>
+						</tr> -->
+
 					</table>
 					<table id="sellTable" style="width: 90%;">
 						<tr>

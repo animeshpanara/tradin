@@ -1,5 +1,6 @@
 $(document).ready(function(){
 //slider 
+  // startcheckingNots();
   var slides=1;
   var interval;
   startInterval();
@@ -198,3 +199,53 @@ function unload(){
     });
   }
 }
+
+
+// function startcheckingNots(){
+//   var timeInt = setInterval(function(){ 
+//     var notTable=document.getElementsByClassName("notiTabDiv")[0];
+//     var firstChild=notTable.getElementsByClassName('notiTablesDivParent')[0];
+//     var xhttp = new XMLHttpRequest();
+//     xhttp.onreadystatechange = function() {
+
+//       if (this.readyState == 4 && this.status == 200) {
+
+//        console.log(this.responseText);
+//         var messages=JSON.parse(this.responseText);
+//         for(var i=0;i<messages.length;i++)
+//         {
+//           msgs=messages[i];
+//           var table=document.createElement('table');
+//           table.setAttribute('class','notiTables');
+//           table.setAttribute('onclcik',msgs['locationTo']);
+//           var tr=document.createElement('tr');
+//           var td=document.createElement('td');
+//           var img=document.createElement('img');
+//           img.setAttribute('src','propics/'+msgs['propic']);
+//           td.appendChild(img);
+//           if(msgs['count']>1)
+//           {
+//             td.innerHTML+="<span class=\"countSpan\">"+msgs['count']+"<span>";
+//           }
+//           tr.appendChild(td);
+//           td=document.createElement('td');
+//           td.innerHTML=msgs['notifier']+" : "+msgs['notification'];
+//           tr.appendChild(td);
+//           table.appendChild(tr);
+
+//           var div=document.createElement('div');
+//           div.setAttribute('class','notiTablesDivParent');
+//           div.appendChild(table);
+//           // notTable.insertBefore(div,firstChild);
+//           // console.log(notTable);
+//         }
+          
+        
+          
+//       }
+//     };
+//     xhttp.open("POST", "ajax/checkForNotification.php", true);
+//     xhttp.send();
+
+//    }, 2000);  
+// }

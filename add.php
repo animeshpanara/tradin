@@ -9,6 +9,7 @@ if (!isset($_SESSION['userLogged'])) {
 }
 
 include_once('dbconfig.php');
+include_once('chatConfig.php'); 
 if (!isset($_GET['val'])) {
 	header("Location:buy.php");
 }
@@ -41,6 +42,7 @@ include_once('header.php');
 				$iname=$each['iname'];
 				$desc=$each['description'];
 				$price=$each['price'];
+				$id=$each['id'];
 				// $fname=$each['fname'];
 				// $lname=$each['lname'];
 				$uname=$each['uname'];
@@ -67,15 +69,27 @@ include_once('header.php');
 				else
 					$img4="noImg.jpg";
 
+
+				$iid=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `iid` FROM `interested` WHERE `id`='$id' AND `likedBy`='$userName' "));
+				if(empty($iid))
+					$intText="Interested";
+				else
+					$intText="Not Interested";
+
 				if($userName!=$uname)
 					$showBtn="
-				<div class=\"rowp\">
-					<div class=\"icont\">	
-				<tr><td><form method=\"GET\" action=\"chat.php\">
-										<input type='hidden' name='chatWith' value='$uname'>
-										<input type='submit' class='btn btn-success' value='Chat with Seller' name='chat'>
-										</form></td>
-									</tr>";
+				<tr>
+					<td>
+						<form method=\"GET\" action=\"chat.php\">
+							<input type='hidden' name='chatWith' value='$uname'>
+							<input style=\"margin-top:20px;\" type='submit' class='btn btn-success' value='Chat with Seller' name='chat'>
+						</form>
+					</td>
+					<td>
+						<button class=\"btn btn-primary\" onclick=\"addForInt($id,this)\">$intText</button>
+					</td>
+				</tr>";
+				
 				else 
 					$showBtn="";
 			    echo "
@@ -93,9 +107,10 @@ include_once('header.php');
 										<td><label for=\"iname\" class=\"slabels\">Price : </label><span style=\"font-size: 20px;margin-left: 15px; color: red;\">$price</span></td>
 									</tr>
 									<tr>
-										<td rowspan=\"1\"><img src=\"sellpics/$img2\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"><img src=\"sellpics/$img3\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"><img src=\"sellpics/$img4\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"></td>
+										<td><img src=\"sellpics/$img2\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"><img src=\"sellpics/$img3\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"><img src=\"sellpics/$img4\" style=\"width: 40px;height: 40px;margin-left: 5px;margin-right: 5px;cursor: pointer;\"></td>
 										<td><label for=\"iname\" class=\"slabels\">Seller Name : </label><span style=\"font-size: 20px;margin-left: 15px;\">$fname $lname </span></td>
 									</tr>$showBtn
+									
 									
 				</table>
 				

@@ -4,6 +4,7 @@ if (!isset($_SESSION['userLogged'])) {
 	header("Location:index.php");
 }
 include_once('dbconfig.php');
+include_once('chatConfig.php'); 
 $userName=$_SESSION['userLogged'];
 $vercode=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `verified` FROM `users` WHERE `uname`='$userName'"));
 $vercode=$vercode['verified'];

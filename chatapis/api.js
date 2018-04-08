@@ -18,13 +18,18 @@ function sendMsg(from,to) {
       var divMsg=document.createElement("div");
       divMsg.setAttribute("class","chatSend");
       divMsg.innerHTML = "<pre>"+textToSend+"</pre>";
+      var status=this.responseText;
+      if (status=="1") {
+      	divMsg.innerHTML+="<i class=\"fa fa-check\"></i>";
+      }
       var tr=document.createElement("tr");
       var td=document.createElement("td");
       td.appendChild(divMsg);
       tr.appendChild(td);
 
       chatTable.appendChild(tr);
-      console.log(this.responseText);
+
+      console.log(status);
     }
   };
   xhttp.open("POST", "ajax/sendMsg.php", true);
@@ -53,15 +58,18 @@ function loadChats(from , to){
 		    else if(msgs[i]["msgfrom"]==to && msgs[i]["msgto"]==from)
 		    	divMsg.setAttribute("class","chatSend");
 		    divMsg.innerHTML = "<pre>"+msgs[i]["msg"]+"</pre>";
+		    if(msgs[i]["msgread"]=="1" && msgs[i]["msgfrom"]==to)
+		    	divMsg.innerHTML+="<i class=\"fa fa-check\"></i>";
 		    var tr=document.createElement("tr");
 		    var td=document.createElement("td");
 		    td.appendChild(divMsg);
 		    tr.appendChild(td);
 			chatTable.appendChild(tr);	
-			console.log(this.responseText);
     	}
 
 	 	startchecking(from,to);
+	 	// startcheckingNots();
+	 	console.log(this.responseText);	
     }
   };
   xhttp.open("POST", "ajax/getMsgs.php", true);
@@ -86,7 +94,11 @@ function startchecking(from , to){
 
 	    	var msgs=JSON.parse(this.responseText);
 	    	lastAct=msgs[1];
+	    	chatActive=msgs[2];
 	    	msgs=msgs[0];
+	    	if(chatActive=="1"){
+	    		$('.chatSend:not(.fa)').append("<i class=\"fa fa-check\"></i>");
+	    	}
 	    	if(lastAct!="1")
 	    	{
 	    		var time = new Date(parseInt(lastAct)*1000-3.5*60*60*1000);
@@ -135,8 +147,10 @@ function startchecking(from , to){
 	  xhttp.open("POST", "ajax/getNewMsgs.php", true);
 	  xhttp.send(data);
 
-
-
 	 }, 2000);	
 }
+
+
+
+
 

@@ -8,6 +8,7 @@ if (!isset($_SESSION['userLogged'])) {
 	header('Location:login.php');
 }
 include_once('dbconfig.php');
+include_once('chatConfig.php'); 
 ?>
 <!DOCTYPE html>
 <html>

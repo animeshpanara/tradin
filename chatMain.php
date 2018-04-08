@@ -28,25 +28,29 @@ $uname=$_SESSION["userLogged"];
 			<div class="icont">
 				<div id="sellBox">
 					<div id="sellWordDiv"><span id="sellWord">Recent Chats</span></div>
-					<table id="sellTable" style="margin-bottom: 20px; " style="width: 90%;">
 						<?php
-							$myChats = mysqli_query($dbase,"SELECT DISTINCT `msgfrom` FROM `chats` WHERE `msgfrom`<>'$uname' ORDER BY `time` DESC");
+							$myChats = mysqli_query($dbase,"SELECT DISTINCT `msgfrom`,`msg` FROM `chats` WHERE `msgfrom`<>'$uname' AND `msgto`='$uname' ORDER BY `time` DESC");
 							while($myChat=mysqli_fetch_assoc($myChats))
 							{
 								$from=$myChat["msgfrom"];
+								$msg=$myChat["msg"];
+								$propic=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `propic` FROM `users` WHERE `uname`='$from'"));
+								$propic=$propic['propic'];
 								echo "
-								<tr>
-									<td style=\"font-size:20px;\"><span style=\"margin:20px;\">$from</span></td>
-									<td><form method=\"get\" action=\"chat.php\">
-										<input type='hidden' name='chatWith' value='$from'>
-										<input type='submit' class='btn btn-success' value='Chat with Buyer' name='chat'>
-										</form></td>
-								</tr>
+								<table onclick=\"location.href='chat.php?chatWith=$from&chat=Chat+with+Seller'\" class=\"chatMainTable\">
+									<tr>
+										<td rowspan=\"2\">
+											<img src=\"propics/$propic\">
+										</td>
+										<td>$from</td>
+									</tr>
+									<tr>
+										<td>$msg</td>
+									</tr>
+								</table>
 								";
 							}
-						?>
-					</table>
-					
+						?>					
 				</div>
 			</div>
 		</div>

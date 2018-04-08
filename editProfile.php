@@ -8,6 +8,7 @@ if (!isset($_SESSION['userLogged'])) {
 	header("Location:index.php");
 }
 include_once('dbconfig.php'); 
+include_once('chatConfig.php'); 
 $uname=$_SESSION['userLogged'];
 $result="";
 $user=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT * FROM `users` WHERE `uname`='$uname'"));

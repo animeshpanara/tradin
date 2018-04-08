@@ -4,6 +4,7 @@ if (isset($_SESSION['userLogged'])) {
 	header("Location:index.php");
 }
 include_once('dbconfig.php');
+include_once('chatConfig.php'); 
 $username="";
 if (isset($_SESSION['userLogged'])) {
 	$result="<span style='color:green'>Successfully LoggedIn</span>";

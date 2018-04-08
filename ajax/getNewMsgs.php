@@ -17,6 +17,9 @@
     }
     $data=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `status` FROM `users` WHERE `uname`='$from'"));
     $data=$data["status"];
-    echo json_encode(array($rows,$data));
+
+    $data2=mysqli_fetch_assoc(mysqli_query($dbase,"SELECT `chatActive` FROM `users` WHERE `uname`='$from'"));
+    $data2=$data2["chatActive"];
+    echo json_encode(array($rows,$data,$data2));
 
 ?>
